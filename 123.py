@@ -1,8 +1,8 @@
 import sys
 
 # Импортируем из PyQt5.QtWidgets классы для создания приложения и виджета
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton
-from PyQt5.QtWidgets import QLabel, QLineEdit
+from PyQt5.QtWidgets import *
+
 
 
 # Унаследуем наш класс от простейшего графического примитива QWidget
