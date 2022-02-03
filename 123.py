@@ -7,6 +7,14 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import Qt
 
+keys_updown = {
+    Qt.Key_Down: -1,
+    Qt.Key_Up: 1
+}
+
+keys_rightleft = {
+    Qt.Key_Left: -1, Qt.Key_Right: 1,
+}
 
 # Унаследуем наш класс от простейшего графического примитива QWidget
 class Example(QWidget):
@@ -15,10 +23,16 @@ class Example(QWidget):
         self.initUI()
 
     def keyPressEvent(self, event):
-        if event.key() == Qt.Key_PageUp:
+        key = event.key()
+        if key == Qt.Key_PageUp:
             self.scale = min(self.scale + 1, 17)
-        if event.key() == Qt.Key_PageDown:
+        elif key == Qt.Key_PageDown:
             self.scale = max(self.scale - 1, 0)
+        elif key in keys_updown:
+            self.lat += keys_updown[key]
+        elif key in keys_rightleft:
+            self.lon += keys_rightleft[key]
+
         self.text_mash.setText(f'Масштаб: {self.scale}')
         self.ResetImage()
         event.accept()
@@ -41,10 +55,16 @@ class Example(QWidget):
             file.write(response.content)
         return True
 
-    def ResetImage(self):
-        self.lon = self.line_lon.text()
-        self.lat = self.line_lat.text()
+    def pushbutton(self):
+        self.lon = float(self.line_lon.text())
+        self.lat = float(self.line_lat.text())
+        self.line_lon.setEnabled(False)
+        self.line_lon.setEnabled(True)
+        self.line_lat.setEnabled(False)
+        self.line_lat.setEnabled(True)
+        self.ResetImage()
 
+    def ResetImage(self):
         if self.getImage():
             self.pixmap = QPixmap(self.map_file)
             self.image.setPixmap(self.pixmap)
@@ -80,7 +100,7 @@ class Example(QWidget):
 
         self.map_compile = QPushButton()
         self.map_compile.setText('Загрузить карту')
-        self.map_compile.clicked.connect(self.ResetImage)
+        self.map_compile.clicked.connect(self.pushbutton)
         self.lay.addWidget(self.map_compile, 8, 0, 1, 2)
 
 
