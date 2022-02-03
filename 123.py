@@ -57,7 +57,11 @@ class Example(QWidget):
         self.lay.addWidget(self.text_mash, 2, 0, 1, 1)
 
         self.image = QLabel(self)
-        self.lay.addWidget(self.image, 3, 0, 5, 5)
+        self.lay.addWidget(self.image, 3, 0, 5, 2)
+        
+        self.map_compile = QPushButton()
+        self.map_compile.setText('Загрузить карту')
+        self.lay.addWidget(self.map_compile, 8, 0, 1, 2)
 
         if self.getImage():
             self.pixmap = QPixmap(self.map_file)
