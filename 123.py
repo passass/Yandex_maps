@@ -3,7 +3,7 @@ import requests
 from os import remove
 
 # Импортируем из PyQt5.QtWidgets классы для создания приложения и виджета
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QGridLayout
 from PyQt5.QtGui import QPixmap
 
 
@@ -14,11 +14,8 @@ class Example(QWidget):
         self.initUI()
 
     def getImage(self):
-        lon = 37.530887
-        lat = 55.703118
-        delta = 0.002
 
-        paramsz = {'ll': ','.join([str(lon), str(lat)]), 'spn': ','.join([str(delta), str(delta)]), 'l': 'map'}
+        paramsz = {'ll': ','.join([str(self.lon), str(self.lat)]), 'z': self.scale, 'l': 'map'}
 
         map_request = "http://static-maps.yandex.ru/1.x/"
         response = requests.get(map_request, params=paramsz)
@@ -51,16 +48,20 @@ class Example(QWidget):
 
         self.line_lat = QLineEdit()
         self.lay.addWidget(self.line_lat, 1, 1, 1, 1)
-        self.delta = 100
-        self.text_mash = QLabel(f'Масштаб: {self.delta}')
+
+        self.scale = 1
+        self.lon = 55.703118
+        self.lat = 37.530887
+
+        self.text_mash = QLabel(f'Масштаб: {self.scale}')
         self.lay.addWidget(self.text_mash, 2, 0, 1, 1)
+
+        self.image = QLabel(self)
+        self.lay.addWidget(self.image, 3, 0, 5, 5)
 
         if self.getImage():
             self.pixmap = QPixmap(self.map_file)
-            self.image = QLabel(self)
-            self.lay.addWidget(self.image, 3, 0, 5, 5)
             self.image.setPixmap(self.pixmap)
-
             remove(self.map_file)
 
 
