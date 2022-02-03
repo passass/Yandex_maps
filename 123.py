@@ -3,8 +3,8 @@ import requests
 from os import remove
 
 # Импортируем из PyQt5.QtWidgets классы для создания приложения и виджета
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QGridLayout
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
 
 
 # Унаследуем наш класс от простейшего графического примитива QWidget
@@ -31,6 +31,15 @@ class Example(QWidget):
             file.write(response.content)
         return True
 
+    def buttonpush(self):
+        self.lon = self.line_lon.text()
+        self.lat = self.line_lat.text()
+
+        if self.getImage():
+            self.pixmap = QPixmap(self.map_file)
+            self.image.setPixmap(self.pixmap)
+            remove(self.map_file)
+
     def initUI(self):
         self.setFixedSize(450, 550)
         self.setWindowTitle('Яндекс карты')
@@ -49,7 +58,7 @@ class Example(QWidget):
         self.line_lat = QLineEdit()
         self.lay.addWidget(self.line_lat, 1, 1, 1, 1)
 
-        self.scale = 1
+        self.scale = 6
         self.lon = 55.703118
         self.lat = 37.530887
 
@@ -58,15 +67,11 @@ class Example(QWidget):
 
         self.image = QLabel(self)
         self.lay.addWidget(self.image, 3, 0, 5, 2)
-        
+
         self.map_compile = QPushButton()
         self.map_compile.setText('Загрузить карту')
+        self.map_compile.clicked.connect(self.buttonpush)
         self.lay.addWidget(self.map_compile, 8, 0, 1, 2)
-
-        if self.getImage():
-            self.pixmap = QPixmap(self.map_file)
-            self.image.setPixmap(self.pixmap)
-            remove(self.map_file)
 
 
 if __name__ == '__main__':
