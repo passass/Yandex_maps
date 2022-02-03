@@ -35,14 +35,30 @@ class Example(QWidget):
         return True
 
     def initUI(self):
-        self.setFixedSize(600, 600)
+        self.setFixedSize(450, 550)
         self.setWindowTitle('Яндекс карты')
+        self.lay = QGridLayout()
+        self.setLayout(self.lay)
+
+        self.text_lon = QLabel('Введите долготу')
+        self.lay.addWidget(self.text_lon, 0, 0, 1, 1)
+
+        self.line_lon = QLineEdit()
+        self.lay.addWidget(self.line_lon, 0, 1, 1, 1)
+
+        self.text_lat = QLabel('Введите широту')
+        self.lay.addWidget(self.text_lat, 1, 0, 1, 1)
+
+        self.line_lat = QLineEdit()
+        self.lay.addWidget(self.line_lat, 1, 1, 1, 1)
+        self.delta = 100
+        self.text_mash = QLabel(f'Масштаб: {self.delta}')
+        self.lay.addWidget(self.text_mash, 2, 0, 1, 1)
 
         if self.getImage():
             self.pixmap = QPixmap(self.map_file)
             self.image = QLabel(self)
-            self.image.move(0, 0)
-            self.image.resize(600, 600)
+            self.lay.addWidget(self.image, 3, 0, 5, 5)
             self.image.setPixmap(self.pixmap)
 
             remove(self.map_file)
