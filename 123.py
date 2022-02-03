@@ -12,7 +12,7 @@ class Example(QWidget):
         self.initUI()
 
     def initUI(self):
-        self.setFixedSize(450, 450)
+        self.setFixedSize(450, 550)
         self.setWindowTitle('Яндекс карты')
 
 if __name__ == '__main__':
