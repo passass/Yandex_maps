@@ -5,6 +5,7 @@ from os import remove
 # Импортируем из PyQt5.QtWidgets классы для создания приложения и виджета
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
+from PyQt5.QtCore import Qt
 
 
 # Унаследуем наш класс от простейшего графического примитива QWidget
@@ -12,6 +13,15 @@ class Example(QWidget):
     def __init__(self):
         super().__init__()
         self.initUI()
+
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_PageUp:
+            self.scale = min(self.scale + 1, 17)
+        if event.key() == Qt.Key_PageDown:
+            self.scale = max(self.scale - 1, 0)
+        self.text_mash.setText(f'Масштаб: {self.scale}')
+        self.ResetImage()
+        event.accept()
 
     def getImage(self):
 
@@ -31,7 +41,7 @@ class Example(QWidget):
             file.write(response.content)
         return True
 
-    def buttonpush(self):
+    def ResetImage(self):
         self.lon = self.line_lon.text()
         self.lat = self.line_lat.text()
 
@@ -70,7 +80,7 @@ class Example(QWidget):
 
         self.map_compile = QPushButton()
         self.map_compile.setText('Загрузить карту')
-        self.map_compile.clicked.connect(self.buttonpush)
+        self.map_compile.clicked.connect(self.ResetImage)
         self.lay.addWidget(self.map_compile, 8, 0, 1, 2)
 
 
