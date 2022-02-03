@@ -24,29 +24,28 @@ class Example(QWidget):
         response = requests.get(map_request, params=paramsz)
 
         if not response:
-            print("Ошибка выполнения запроса:")
-            print(map_request)
-            print("Http статус:", response.status_code, "(", response.reason, ")")
-            sys.exit(1)
+            print('Ошибка обработки запроса')
+            print('Введены неправильные аргументы')
+            return False
 
         # Запишем полученное изображение в файл.
         self.map_file = "map.png"
         with open(self.map_file, "wb") as file:
             file.write(response.content)
+        return True
 
     def initUI(self):
         self.setFixedSize(600, 600)
         self.setWindowTitle('Яндекс карты')
 
-        self.getImage()
+        if self.getImage():
+            self.pixmap = QPixmap(self.map_file)
+            self.image = QLabel(self)
+            self.image.move(0, 0)
+            self.image.resize(600, 600)
+            self.image.setPixmap(self.pixmap)
 
-        self.pixmap = QPixmap(self.map_file)
-        self.image = QLabel(self)
-        self.image.move(0, 0)
-        self.image.resize(600, 600)
-        self.image.setPixmap(self.pixmap)
-
-        remove(self.map_file)
+            remove(self.map_file)
 
 
 if __name__ == '__main__':
